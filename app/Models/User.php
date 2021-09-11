@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_WAIT = 'wait';
+
     /**
      * The attributes that are mass assignable.
      *
