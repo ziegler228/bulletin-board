@@ -51,8 +51,13 @@ class User extends Authenticatable
         return static::create([
             'name' => $name,
             'email' => $email,
-            'password' => bcrypt($password),
+            'password' => \Hash::make($password),
             'status' => self::STATUS_ACTIVE
         ]);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
     }
 }
