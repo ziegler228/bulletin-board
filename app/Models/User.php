@@ -108,9 +108,14 @@ class User extends Authenticatable
         return $this->status === self::STATUS_ACTIVE;
     }
 
+    public function isWait(): bool
+    {
+        return $this->status === self::STATUS_WAIT;
+    }
+
     public function verify()
     {
-        if (!$this->isWait()) {
+        if (!$this->isActive()) {
             throw new \DomainException('User is already verified.');
         }
 
