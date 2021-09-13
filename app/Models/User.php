@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -86,7 +87,19 @@ class User extends Authenticatable
             'name' => $name,
             'email' => $email,
             'password' => bcrypt($password),
-            'status' => self::STATUS_ACTIVE
+            'status' => self::STATUS_ACTIVE,
+            'email_verified_at' => Carbon::now()
+        ]);
+    }
+
+    public static function register(string $name, string $email, string $password): self
+    {
+        return static::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt($password),
+            'status' => self::STATUS_WAIT,
+            'verify_token' => Str::random()
         ]);
     }
 
