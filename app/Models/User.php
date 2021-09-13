@@ -59,7 +59,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'status'
+        'status',
+        'verify_token',
+        'email_verified_at'
     ];
 
     /**
@@ -70,6 +72,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'email_verified_at',
+        'verify_token'
     ];
 
     /**
@@ -115,7 +119,7 @@ class User extends Authenticatable
 
     public function verify()
     {
-        if (!$this->isActive()) {
+        if ($this->isActive()) {
             throw new \DomainException('User is already verified.');
         }
 

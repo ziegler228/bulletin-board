@@ -3,28 +3,31 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\JsonResponse;
 
 class VerifyEmailController extends Controller
 {
     /**
      * Mark the authenticated user's email address as verified.
      *
-     * @param  \Illuminate\Foundation\Auth\EmailVerificationRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  string $token
+     * @return JsonResponse
      */
-    public function __invoke(EmailVerificationRequest $request)
+    public function __invoke(string $token)
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
-        }
+        $user = User::where('verify_token', $token)->firstOrFail();
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
-        }
+        try {
+            $user->verify();
 
-        return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
+            return response()->json(['success' => true]);
+
+        } catch (\DomainException $e) {
+            return response()->json(['success' => false]);
+        }
     }
 }
