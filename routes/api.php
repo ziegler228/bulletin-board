@@ -21,5 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::resource('users', \App\Http\Controllers\Admin\UsersController::class)->except(['create', 'edit']);
 
 
-Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store'])
-    ->middleware('guest');
+Route::middleware(['guest'])->group(function() {
+    Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
+    Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
+});
