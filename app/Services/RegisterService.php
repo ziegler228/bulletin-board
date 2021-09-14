@@ -18,4 +18,11 @@ class RegisterService
 
         return $user;
     }
+
+    public function verify(int $id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->verify();
+    }
 }
