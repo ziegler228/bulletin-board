@@ -45,10 +45,14 @@ class VerifyCommand extends Command
             return 1;
         }
 
-        $this->registerService->verify($user->id);
+        try {
+            $this->registerService->verify($user->id);
+        } catch (\DomainException $e) {
+            $this->error($e->getMessage());
+            return 1;
+        }
 
         $this->info('Email is successfully confirmed');
-
         return 0;
     }
 }

@@ -19,7 +19,14 @@ class RegisterService
         return $user;
     }
 
-    public function verify(int $id)
+    /**
+     * @param int $id
+     *
+     * @throws \DomainException
+     *
+     * @return void
+     */
+    public function verify(int $id): void
     {
         $user = User::findOrFail($id);
 
