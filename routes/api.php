@@ -18,11 +18,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('users', \App\Http\Controllers\Admin\UsersController::class)->except(['create', 'edit']);
-
 Route::get('/verify-email/{token}', [\App\Http\Controllers\Auth\VerifyEmailController::class, '__invoke']);
 
 Route::middleware(['guest'])->group(function() {
     Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
     Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
+});
+
+Route::middleware(['auth:sanctum', 'can:admin-panel'])->prefix('admin')->group(function () {
+    Route::resource('users', \App\Http\Controllers\Admin\UsersController::class)->except(['create', 'edit']);
 });
