@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Users\CreateRequest;
+use App\Http\Resources\User\UserCollection;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +22,7 @@ class UsersController extends Controller
     {
         $users = User::all();
 
-        return response()->json(['users' => $users]);
+        return response()->json(['users' => new UserCollection($users)]);
     }
 
     /**
@@ -37,7 +39,7 @@ class UsersController extends Controller
             $request->password,
         );
 
-        return response()->json(['user' => $user], 201);
+        return response()->json(['success' => true, 'user' => new UserResource($user)], 201);
     }
 
     /**
@@ -48,7 +50,7 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        return response()->json(['user' => $user]);
+        return response()->json(['success' => true, 'user' => new UserResource($user)]);
     }
 
     /**
@@ -64,7 +66,7 @@ class UsersController extends Controller
 
         $user->update($data);
 
-        return response()->json(['user' => $user]);
+        return response()->json(['success' => true, 'user' => new UserResource($user)]);
     }
 
     /**
