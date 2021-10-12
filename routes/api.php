@@ -27,4 +27,5 @@ Route::middleware(['guest'])->group(function() {
 
 Route::middleware(['auth:sanctum', 'can:admin-panel'])->prefix('admin')->group(function () {
     Route::resource('users', \App\Http\Controllers\Admin\UsersController::class)->except(['create', 'edit']);
+    Route::resource('regions', \App\Http\Controllers\Admin\RegionController::class)->except(['create', 'edit']);
 });
